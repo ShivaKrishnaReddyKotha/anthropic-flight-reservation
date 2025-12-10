@@ -37,6 +37,6 @@ java -cp out flight.Main
     -   *Service Layer* (`FlightService`): Contains the business logic (searching, validating inventory, booking). This ensures that logic is not tightly coupled to the user interface.
     -   *Interface* (`Main`): Handles user input/output strictly.
 -   **Immutability Strategy**: While Flight logic is mutable (decreasing seats), the `FlightService` returns new lists or copies of collections (e.g., `new ArrayList<>(reservations)`) rather than direct references to internal storage. This protects the internal data structure from unintended external modification.
--   **Java Streams**: utilzied the Java Stream API in `searchFlights` to provide a declarative, readable way to filter flights based on destination, date, and availability without complex nested loops.
+-   **Java Streams**: utilized the Java Stream API in `searchFlights` to provide a declarative, readable way to filter flights based on destination, date, and availability without complex nested loops.
 -   **Exception Handling**: Specific exceptions (`IllegalArgumentException`, `IllegalStateException`) are thrown when business rules are violated (e.g., booking 0 seats or booking a full flight). These are caught in the UI layer to provide friendly error messages to the user without crashing the app.
 -   **Pre-Seeded Data**: The application initializes with dummy data (flights to New York and London) to allow immediate testing without manual data entry.
