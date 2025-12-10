@@ -32,19 +32,11 @@ java -cp out flight.Main
 
 -   **In-Memory Data Storage**: For simplicity and ease of setup, all data (flights, reservations) is stored in memory (`List` structures). Data is not persisted after the application exits.
 -   **Console Interface**: A CLI (Command Line Interface) was chosen to focus on core business logic without the overhead of a GUI or web frontend.
--   **Service Layer Pattern**: The application separates concerns:
-    -   `FlightService`: Handles business logic (searching, booking).
-    -   `Main`: Handles user interaction and input.
-    -   `Flight` / `Reservation`: Data models (POJOs).
+-   **Separation of Concerns**: The application is divided into distinct layers:
+    -   *Models* (`Flight`, `Reservation`): Pure POJOs (Plain Old Java Objects) representing the data.
+    -   *Service Layer* (`FlightService`): Contains the business logic (searching, validating inventory, booking). This ensures that logic is not tightly coupled to the user interface.
+    -   *Interface* (`Main`): Handles user input/output strictly.
+-   **Immutability Strategy**: While Flight logic is mutable (decreasing seats), the `FlightService` returns new lists or copies of collections (e.g., `new ArrayList<>(reservations)`) rather than direct references to internal storage. This protects the internal data structure from unintended external modification.
+-   **Java Streams**: utilzied the Java Stream API in `searchFlights` to provide a declarative, readable way to filter flights based on destination, date, and availability without complex nested loops.
+-   **Exception Handling**: Specific exceptions (`IllegalArgumentException`, `IllegalStateException`) are thrown when business rules are violated (e.g., booking 0 seats or booking a full flight). These are caught in the UI layer to provide friendly error messages to the user without crashing the app.
 -   **Pre-Seeded Data**: The application initializes with dummy data (flights to New York and London) to allow immediate testing without manual data entry.
-
-## Real-Life Considerations
-
-While this application demonstrates the core logic, a production-grade system would require significant enhancements:
-
-1.  **Persistence**: Replace in-memory lists with a relational database (e.g., PostgreSQL, MySQL) to save data permanently.
-2.  **Concurrency**: Implement thread-safe mechanisms (e.g., database transactions/locking) to prevent double-booking when multiple users try to reserve the last seat simultaneously.
-3.  **Authentication & Authorization**: Add user login and roles (e.g., Admin vs. Customer) to secure the system.
-4.  **Input Validation**: robust validation for all user inputs (dates, names, negative numbers) to prevent errors and security vulnerabilities.
-5.  **Scalability**: Microservices architecture for high-demand components (e.g., separate Search Service vs. Booking Service).
-6.  **Logging & Monitoring**: Integrate logging frameworks (SLF4J/Logback) instead of `System.out` for better debugging and production monitoring.
